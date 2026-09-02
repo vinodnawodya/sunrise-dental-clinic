@@ -5,11 +5,13 @@ import com.sunrisedental.entity.AppointmentStatus;
 import com.sunrisedental.entity.Dentist;
 import com.sunrisedental.entity.Patient;
 import com.sunrisedental.entity.Treatment;
+import com.sunrisedental.event.AppointmentCreatedEvent;
 import com.sunrisedental.repository.AppointmentRepository;
 import com.sunrisedental.repository.DentistRepository;
 import com.sunrisedental.repository.PatientRepository;
 import com.sunrisedental.repository.TreatmentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final DentistRepository dentistRepository;
     private final TreatmentRepository treatmentRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public Appointment createAppointment(Long patientId, Long dentistId, Long treatmentId,
@@ -46,7 +49,9 @@ public class AppointmentService {
                 .status(AppointmentStatus.SCHEDULED)
                 .build();
 
-        return appointmentRepository.save(appointment);
+        Appointment saved = appointmentRepository.save(appointment);
+        eventPublisher.publishEvent(new AppointmentCreatedEvent(this, saved));
+        return saved;
     }
 
     public Appointment findByAppointmentNumber(String appointmentNumber) {
