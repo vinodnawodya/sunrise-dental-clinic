@@ -39,6 +39,11 @@ public class AppointmentService {
         Treatment treatment = treatmentRepository.findById(treatmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Treatment not found: " + treatmentId));
 
+        if (appointmentRepository.existsByDentistAndAppointmentDateAndAppointmentTime(dentist, appointmentDate, appointmentTime)) {
+            throw new DentistDoubleBookingException(
+                    "Dentist " + dentist.getName() + " already has an appointment on " + appointmentDate + " at " + appointmentTime);
+        }
+
         Appointment appointment = Appointment.builder()
                 .appointmentNumber(generateAppointmentNumber())
                 .patient(patient)

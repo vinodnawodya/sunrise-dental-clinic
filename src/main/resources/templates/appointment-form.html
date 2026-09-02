@@ -18,6 +18,8 @@
     <div class="card">
         <h1>Register Appointment</h1>
 
+        <div class="alert-error" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}" th:text="${err}"></div>
+
         <form th:action="@{/appointments}" th:object="${appointmentForm}" method="post">
             <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 

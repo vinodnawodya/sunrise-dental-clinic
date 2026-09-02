@@ -1,5 +1,6 @@
 package com.sunrisedental.controller.api;
 
+import com.sunrisedental.service.DentistDoubleBookingException;
 import com.sunrisedental.service.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,12 @@ public class ApiExceptionHandler {
     public ResponseEntity<ApiErrorResponse> handleNotFound(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(DentistDoubleBookingException.class)
+    public ResponseEntity<ApiErrorResponse> handleDoubleBooking(DentistDoubleBookingException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiErrorResponse(HttpStatus.CONFLICT.value(), ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

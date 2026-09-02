@@ -4,6 +4,7 @@ import com.sunrisedental.dto.AppointmentFormDto;
 import com.sunrisedental.repository.DentistRepository;
 import com.sunrisedental.repository.TreatmentRepository;
 import com.sunrisedental.service.AppointmentService;
+import com.sunrisedental.service.DentistDoubleBookingException;
 import com.sunrisedental.service.PatientService;
 import com.sunrisedental.service.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -42,14 +43,20 @@ public class AppointmentController {
             return "appointment-form";
         }
 
-        var appointment = appointmentService.createAppointment(
-                appointmentForm.getPatientId(),
-                appointmentForm.getDentistId(),
-                appointmentForm.getTreatmentId(),
-                appointmentForm.getAppointmentDate(),
-                appointmentForm.getAppointmentTime());
+        try {
+            var appointment = appointmentService.createAppointment(
+                    appointmentForm.getPatientId(),
+                    appointmentForm.getDentistId(),
+                    appointmentForm.getTreatmentId(),
+                    appointmentForm.getAppointmentDate(),
+                    appointmentForm.getAppointmentTime());
 
-        return "redirect:/appointments/search?number=" + appointment.getAppointmentNumber();
+            return "redirect:/appointments/search?number=" + appointment.getAppointmentNumber();
+        } catch (DentistDoubleBookingException ex) {
+            bindingResult.reject("dentistDoubleBooked", ex.getMessage());
+            addFormReferenceData(model);
+            return "appointment-form";
+        }
     }
 
     @GetMapping("/search")
