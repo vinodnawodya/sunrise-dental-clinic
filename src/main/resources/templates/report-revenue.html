@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Revenue by Treatment - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/reports/daily}">Today's Appointments</a>
+        <a th:href="@{/help}">Help</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Revenue by Treatment</h1>
+        <p>Total billed revenue, grouped by treatment, from all generated bills.</p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Treatment</th>
+                <th>Total Revenue</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${revenueRows}">
+                <td th:text="${row.treatmentName}"></td>
+                <td th:text="'£' + ${row.revenue}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(revenueRows)}">
+                <td colspan="2">No bills have been generated yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

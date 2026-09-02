@@ -26,4 +26,19 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Long> 
             Dentist dentist, LocalDate appointmentDate, LocalTime appointmentTime);
 
     List<Appointment> findByAppointmentDate(LocalDate appointmentDate);
+
+    /** Backed by the daily_appointments_view SQL view (see db/schema-*.sql). */
+    @Query(value = "SELECT * FROM daily_appointments_view", nativeQuery = true)
+    List<DailyAppointmentView> findTodaysAppointments();
+
+    interface DailyAppointmentView {
+        String getAppointmentNumber();
+        String getPatientName();
+        String getPatientContact();
+        String getDentistName();
+        String getTreatmentName();
+        LocalDate getAppointmentDate();
+        LocalTime getAppointmentTime();
+        String getStatus();
+    }
 }

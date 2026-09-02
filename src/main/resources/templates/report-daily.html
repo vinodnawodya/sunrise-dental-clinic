@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Today's Appointments - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/reports/revenue}">Revenue Report</a>
+        <a th:href="@{/help}">Help</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Today's Appointments</h1>
+        <p>Backed by the <code>daily_appointments_view</code> SQL view.</p>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Patient</th>
+                <th>Contact</th>
+                <th>Dentist</th>
+                <th>Treatment</th>
+                <th>Time</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${appointments}">
+                <td th:text="${a.appointmentNumber}"></td>
+                <td th:text="${a.patientName}"></td>
+                <td th:text="${a.patientContact}"></td>
+                <td th:text="${a.dentistName}"></td>
+                <td th:text="${a.treatmentName}"></td>
+                <td th:text="${a.appointmentTime}"></td>
+                <td th:text="${a.status}"></td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(appointments)}">
+                <td colspan="7">No appointments scheduled for today.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
