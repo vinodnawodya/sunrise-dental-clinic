@@ -20,7 +20,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
+import com.sunrisedental.entity.Appointment;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -62,5 +69,38 @@ class AppointmentServiceTest {
 
         assertThatThrownBy(() -> appointmentService.createAppointment(1L, 1L, 1L, date, time))
                 .isInstanceOf(DentistDoubleBookingException.class);
+        verify(appointmentRepository, never()).save(any(Appointment.class));
+    }
+
+    @Test
+    void createAppointment_savesAndPublishesEvent_whenNoConflict() {
+        Patient patient = Patient.builder().id(1L).name("Alice Morgan").address("Cardiff").contactNumber("07700123456").build();
+        Dentist dentist = Dentist.builder().id(1L).name("Dr. Sarah Lewis").specialization("General Dentistry").build();
+        Treatment treatment = Treatment.builder().id(1L).name("Dental Cleaning").category(TreatmentCategory.STANDARD).baseCost(new BigDecimal("50.00")).build();
+        LocalDate date = LocalDate.now().plusDays(1);
+        LocalTime time = LocalTime.of(9, 30);
+
+        when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
+        when(dentistRepository.findById(1L)).thenReturn(Optional.of(dentist));
+        when(treatmentRepository.findById(1L)).thenReturn(Optional.of(treatment));
+        when(appointmentRepository.existsByDentistAndAppointmentDateAndAppointmentTime(dentist, date, time))
+                .thenReturn(false);
+        when(appointmentRepository.count()).thenReturn(0L);
+        when(appointmentRepository.findByAppointmentNumber("APT-000001")).thenReturn(Optional.empty());
+        when(appointmentRepository.save(any(Appointment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Appointment result = appointmentService.createAppointment(1L, 1L, 1L, date, time);
+
+        assertThat(result.getAppointmentNumber()).isEqualTo("APT-000001");
+        assertThat(result.getStatus()).isEqualTo(com.sunrisedental.entity.AppointmentStatus.SCHEDULED);
+        verify(eventPublisher, times(1)).publishEvent(any());
+    }
+
+    @Test
+    void findByAppointmentNumber_throwsResourceNotFoundException_whenMissing() {
+        when(appointmentRepository.findByAppointmentNumber("APT-999999")).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> appointmentService.findByAppointmentNumber("APT-999999"))
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 }
