@@ -54,9 +54,10 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <!-- Not runtime-scoped: the H2-native trigger/alias classes in
+                 com.sunrisedental.config compile against org.h2.api.Trigger. -->
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
