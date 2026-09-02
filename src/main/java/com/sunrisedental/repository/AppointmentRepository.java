@@ -3,6 +3,8 @@ package com.sunrisedental.repository;
 import com.sunrisedental.entity.Appointment;
 import com.sunrisedental.entity.Dentist;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -11,7 +13,14 @@ import java.util.Optional;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Long> {
 
-    Optional<Appointment> findByAppointmentNumber(String appointmentNumber);
+    @Query("""
+            SELECT a FROM Appointment a
+            JOIN FETCH a.patient
+            JOIN FETCH a.dentist
+            JOIN FETCH a.treatment
+            WHERE a.appointmentNumber = :appointmentNumber
+            """)
+    Optional<Appointment> findByAppointmentNumber(@Param("appointmentNumber") String appointmentNumber);
 
     boolean existsByDentistAndAppointmentDateAndAppointmentTime(
             Dentist dentist, LocalDate appointmentDate, LocalTime appointmentTime);

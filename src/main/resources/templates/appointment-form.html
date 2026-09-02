@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Appointment - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/appointments/search}">Search</a>
+        <a th:href="@{/help}">Help</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Register Appointment</h1>
+
+        <form th:action="@{/appointments}" th:object="${appointmentForm}" method="post">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-group">
+                <label for="patientId">Patient</label>
+                <select id="patientId" th:field="*{patientId}">
+                    <option value="">-- select patient --</option>
+                    <option th:each="patient : ${patients}" th:value="${patient.id}" th:text="${patient.name}"></option>
+                </select>
+                <div class="field-error" th:if="${#fields.hasErrors('patientId')}" th:errors="*{patientId}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="dentistId">Dentist</label>
+                <select id="dentistId" th:field="*{dentistId}">
+                    <option value="">-- select dentist --</option>
+                    <option th:each="dentist : ${dentists}" th:value="${dentist.id}"
+                            th:text="${dentist.name + ' (' + dentist.specialization + ')'}"></option>
+                </select>
+                <div class="field-error" th:if="${#fields.hasErrors('dentistId')}" th:errors="*{dentistId}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="treatmentId">Treatment</label>
+                <select id="treatmentId" th:field="*{treatmentId}">
+                    <option value="">-- select treatment --</option>
+                    <option th:each="treatment : ${treatments}" th:value="${treatment.id}"
+                            th:text="${treatment.name + ' - £' + treatment.baseCost + ' (' + treatment.category + ')'}"></option>
+                </select>
+                <div class="field-error" th:if="${#fields.hasErrors('treatmentId')}" th:errors="*{treatmentId}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="appointmentDate">Date</label>
+                <input type="date" id="appointmentDate" th:field="*{appointmentDate}"/>
+                <div class="field-error" th:if="${#fields.hasErrors('appointmentDate')}" th:errors="*{appointmentDate}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="appointmentTime">Time</label>
+                <input type="time" id="appointmentTime" th:field="*{appointmentTime}"/>
+                <div class="field-error" th:if="${#fields.hasErrors('appointmentTime')}" th:errors="*{appointmentTime}"></div>
+            </div>
+
+            <button type="submit">Register Appointment</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

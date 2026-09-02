@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bill - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header no-print">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/appointments/search}">Search</a>
+        <a th:href="@{/help}">Help</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card receipt">
+        <h1>Receipt</h1>
+        <dl>
+            <dt>Appointment Number</dt>
+            <dd th:text="${bill.appointment.appointmentNumber}"></dd>
+
+            <dt>Patient</dt>
+            <dd th:text="${bill.appointment.patient.name}"></dd>
+
+            <dt>Dentist</dt>
+            <dd th:text="${bill.appointment.dentist.name}"></dd>
+
+            <dt>Treatment</dt>
+            <dd th:text="${bill.appointment.treatment.name} + ' (' + ${bill.appointment.treatment.category} + ')'"></dd>
+
+            <dt>Appointment Date/Time</dt>
+            <dd th:text="${bill.appointment.appointmentDate} + ' ' + ${bill.appointment.appointmentTime}"></dd>
+
+            <dt>Bill Generated</dt>
+            <dd th:text="${bill.generatedDate}"></dd>
+
+            <dt>Total Cost</dt>
+            <dd class="total" th:text="'£' + ${bill.totalCost}"></dd>
+        </dl>
+        <button class="no-print" onclick="window.print()">Print Receipt</button>
+    </div>
+</main>
+</body>
+</html>

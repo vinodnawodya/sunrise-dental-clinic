@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Help - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/login}">Login</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Help</h1>
+
+        <h2>1. Logging in</h2>
+        <p>Use the staff username and password given to you by the clinic administrator on the login page.</p>
+
+        <h2>2. Registering a new appointment</h2>
+        <ol>
+            <li>From the dashboard, click <strong>Register Appointment</strong>.</li>
+            <li>Choose the patient, dentist and treatment from the dropdown lists.</li>
+            <li>Pick a date (today or later) and a time.</li>
+            <li>Click <strong>Register Appointment</strong>. If any field is invalid, the page will
+                reload showing what needs fixing.</li>
+            <li>Once saved, you'll see the appointment details and a generated appointment number
+                (e.g. <code>APT-000123</code>) - make a note of it.</li>
+        </ol>
+
+        <h2>3. Searching for an appointment</h2>
+        <ol>
+            <li>Click <strong>Search Appointment</strong> from the dashboard.</li>
+            <li>Enter the appointment number and click <strong>Search</strong>.</li>
+        </ol>
+
+        <h2>4. Generating and printing a bill</h2>
+        <ol>
+            <li>Search for the appointment.</li>
+            <li>Click <strong>View / Generate Bill</strong> - the bill is created automatically the
+                first time you open it, using the treatment's pricing rules.</li>
+            <li>Click <strong>Print Receipt</strong> to print it.</li>
+        </ol>
+
+        <h2>5. Reports</h2>
+        <p>From the dashboard, <strong>Today's Appointments</strong> lists everything scheduled for
+            today, and <strong>Revenue by Treatment</strong> totals billed revenue per treatment.</p>
+
+        <h2>6. Logging out</h2>
+        <p>Click <strong>Logout</strong> in the top navigation bar.</p>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/appointments/new}">New Appointment</a>
+        <a th:href="@{/appointments/search}">Search</a>
+        <a th:href="@{/reports/daily}">Reports</a>
+        <a th:href="@{/help}">Help</a>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" style="background:none;border:none;color:#eaf2f8;font-weight:500;cursor:pointer;padding:0;">Logout</button>
+        </form>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Staff Dashboard</h1>
+        <p>Signed in as <strong sec:authentication="name">staff</strong>. What would you like to do?</p>
+        <div class="menu-grid">
+            <a class="btn" th:href="@{/appointments/new}">Register Appointment</a>
+            <a class="btn" th:href="@{/appointments/search}">Search Appointment</a>
+            <a class="btn" th:href="@{/reports/daily}">Today's Appointments</a>
+            <a class="btn" th:href="@{/reports/revenue}">Revenue by Treatment</a>
+            <a class="btn" th:href="@{/help}">Help</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

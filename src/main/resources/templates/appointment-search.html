@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Appointment - Sunrise Dental Clinic</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<header class="site-header">
+    <a th:href="@{/dashboard}">Sunrise Dental Clinic</a>
+    <nav class="site-nav">
+        <a th:href="@{/dashboard}">Dashboard</a>
+        <a th:href="@{/appointments/new}">New Appointment</a>
+        <a th:href="@{/help}">Help</a>
+    </nav>
+</header>
+<main class="content">
+    <div class="card">
+        <h1>Search Appointment</h1>
+        <form th:action="@{/appointments/search}" method="get">
+            <div class="form-group">
+                <label for="number">Appointment Number</label>
+                <input type="text" id="number" name="number" placeholder="APT-000001" th:value="${appointmentNumber}"/>
+            </div>
+            <button type="submit">Search</button>
+        </form>
+
+        <div class="alert-error" th:if="${error}" th:text="${error}"></div>
+
+        <div th:if="${appointment}" style="margin-top:1.5rem;">
+            <h2 th:text="${appointment.appointmentNumber}"></h2>
+            <table>
+                <tr><th>Patient</th><td th:text="${appointment.patient.name}"></td></tr>
+                <tr><th>Dentist</th><td th:text="${appointment.dentist.name}"></td></tr>
+                <tr><th>Treatment</th><td th:text="${appointment.treatment.name}"></td></tr>
+                <tr><th>Date</th><td th:text="${appointment.appointmentDate}"></td></tr>
+                <tr><th>Time</th><td th:text="${appointment.appointmentTime}"></td></tr>
+                <tr><th>Status</th><td th:text="${appointment.status}"></td></tr>
+            </table>
+            <p style="margin-top:1rem;">
+                <a class="btn" th:href="@{'/bills/' + ${appointment.appointmentNumber}}">View / Generate Bill</a>
+            </p>
+        </div>
+    </div>
+</main>
+</body>
+</html>
