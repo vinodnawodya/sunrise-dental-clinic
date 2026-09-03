@@ -6,6 +6,7 @@
 -- com.sunrisedental.config.AuditLogTrigger (CREATE TRIGGER ... FOR EACH ROW CALL).
 -- The view is standard SQL and needs no adaptation.
 
+DROP VIEW IF EXISTS daily_appointments_view;
 DROP TABLE IF EXISTS audit_log;
 DROP TABLE IF EXISTS bills;
 DROP TABLE IF EXISTS appointments;
