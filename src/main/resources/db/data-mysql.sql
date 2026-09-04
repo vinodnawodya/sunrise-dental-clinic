@@ -5,19 +5,19 @@ INSERT INTO users (username, password_hash, role) VALUES
     ('admin', '$2a$10$g1mM/rwTz8IiS8jaeRvW9.uyODa9vfu8qRzapYGUpEpEO30h4M1GO', 'STAFF');
 
 INSERT INTO patients (name, address, contact_number) VALUES
-    ('Alice Morgan', '12 Bute Street, Cardiff', '07700123456'),
-    ('Ben Carter', '48 Cathays Terrace, Cardiff', '07700223344'),
-    ('Chloe Davies', '9 Whitchurch Road, Cardiff', '07700998877');
+    ('Kasun Perera', '45 Galle Road, Colombo 03', '0771234567'),
+    ('Nimali Fernando', '12 Kandy Road, Kadawatha', '0712345678'),
+    ('Chathura Bandara', '8 Temple Lane, Kandy', '0765432109');
 
 INSERT INTO dentists (name, specialization) VALUES
-    ('Dr. Sarah Lewis', 'General Dentistry'),
-    ('Dr. Michael Owusu', 'Oral Surgery');
+    ('Dr. Priyantha Jayasuriya', 'General Dentistry'),
+    ('Dr. Anoma Wickramasinghe', 'Oral Surgery');
 
 INSERT INTO treatments (name, category, base_cost) VALUES
-    ('Dental Cleaning', 'STANDARD', 50.00),
-    ('Cavity Filling', 'STANDARD', 120.00),
-    ('Root Canal', 'SURGICAL', 450.00),
-    ('Tooth Extraction', 'SURGICAL', 200.00);
+    ('Dental Cleaning', 'STANDARD', 4500.00),
+    ('Cavity Filling', 'STANDARD', 8500.00),
+    ('Root Canal', 'SURGICAL', 35000.00),
+    ('Tooth Extraction', 'SURGICAL', 12000.00);
 
 INSERT INTO appointments (appointment_number, patient_id, dentist_id, treatment_id, appointment_date, appointment_time, status) VALUES
     ('APT-000001', 1, 1, 1, CURDATE(), '09:30:00', 'SCHEDULED'),

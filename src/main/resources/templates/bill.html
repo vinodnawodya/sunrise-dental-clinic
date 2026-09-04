@@ -37,7 +37,7 @@
             <dd th:text="${bill.generatedDate}"></dd>
 
             <dt>Total Cost</dt>
-            <dd class="total" th:text="'£' + ${bill.totalCost}"></dd>
+            <dd class="total" th:text="'Rs. ' + ${bill.totalCost}"></dd>
         </dl>
         <button class="no-print" onclick="window.print()">Print Receipt</button>
     </div>

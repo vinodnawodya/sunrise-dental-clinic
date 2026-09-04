@@ -29,7 +29,7 @@
             <tbody>
             <tr th:each="row : ${revenueRows}">
                 <td th:text="${row.treatmentName}"></td>
-                <td th:text="'£' + ${row.revenue}"></td>
+                <td th:text="'Rs. ' + ${row.revenue}"></td>
             </tr>
             <tr th:if="${#lists.isEmpty(revenueRows)}">
                 <td colspan="2">No bills have been generated yet.</td>
