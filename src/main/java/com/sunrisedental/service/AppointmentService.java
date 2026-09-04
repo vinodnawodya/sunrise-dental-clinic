@@ -30,10 +30,9 @@ public class AppointmentService {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public Appointment createAppointment(Long patientId, Long dentistId, Long treatmentId,
+    public Appointment createAppointment(String patientName, String patientAddress, String patientContactNumber,
+                                          Long dentistId, Long treatmentId,
                                           LocalDate appointmentDate, LocalTime appointmentTime) {
-        Patient patient = patientRepository.findById(patientId)
-                .orElseThrow(() -> new ResourceNotFoundException("Patient not found: " + patientId));
         Dentist dentist = dentistRepository.findById(dentistId)
                 .orElseThrow(() -> new ResourceNotFoundException("Dentist not found: " + dentistId));
         Treatment treatment = treatmentRepository.findById(treatmentId)
@@ -43,6 +42,12 @@ public class AppointmentService {
             throw new DentistDoubleBookingException(
                     "Dentist " + dentist.getName() + " already has an appointment on " + appointmentDate + " at " + appointmentTime);
         }
+
+        Patient patient = patientRepository.save(Patient.builder()
+                .name(patientName)
+                .address(patientAddress)
+                .contactNumber(patientContactNumber)
+                .build());
 
         Appointment appointment = Appointment.builder()
                 .appointmentNumber(generateAppointmentNumber())

@@ -1,7 +1,9 @@
 package com.sunrisedental.dto;
 
 import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +14,15 @@ import java.time.LocalTime;
 @Setter
 public class AppointmentFormDto {
 
-    @NotNull(message = "Please select a patient")
-    private Long patientId;
+    @NotBlank(message = "Patient name is required")
+    private String patientName;
+
+    @NotBlank(message = "Patient address is required")
+    private String patientAddress;
+
+    @NotBlank(message = "Patient contact number is required")
+    @Pattern(regexp = "^[0-9+()\\-\\s]{7,20}$", message = "Contact number must be 7-20 digits, optionally with +, -, (), or spaces")
+    private String patientContactNumber;
 
     @NotNull(message = "Please select a dentist")
     private Long dentistId;

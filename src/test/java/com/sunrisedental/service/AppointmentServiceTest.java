@@ -55,41 +55,42 @@ class AppointmentServiceTest {
 
     @Test
     void rejectsAppointmentWhenDentistAlreadyBookedAtThatDateAndTime() {
-        Patient patient = Patient.builder().id(1L).name("Alice Morgan").address("Cardiff").contactNumber("07700123456").build();
-        Dentist dentist = Dentist.builder().id(1L).name("Dr. Sarah Lewis").specialization("General Dentistry").build();
-        Treatment treatment = Treatment.builder().id(1L).name("Dental Cleaning").category(TreatmentCategory.STANDARD).baseCost(new BigDecimal("50.00")).build();
+        Dentist dentist = Dentist.builder().id(1L).name("Dr. Priyantha Jayasuriya").specialization("General Dentistry").build();
+        Treatment treatment = Treatment.builder().id(1L).name("Dental Cleaning").category(TreatmentCategory.STANDARD).baseCost(new BigDecimal("4500.00")).build();
         LocalDate date = LocalDate.now().plusDays(1);
         LocalTime time = LocalTime.of(9, 30);
 
-        when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
         when(dentistRepository.findById(1L)).thenReturn(Optional.of(dentist));
         when(treatmentRepository.findById(1L)).thenReturn(Optional.of(treatment));
         when(appointmentRepository.existsByDentistAndAppointmentDateAndAppointmentTime(dentist, date, time))
                 .thenReturn(true);
 
-        assertThatThrownBy(() -> appointmentService.createAppointment(1L, 1L, 1L, date, time))
+        assertThatThrownBy(() -> appointmentService.createAppointment(
+                "Kasun Perera", "45 Galle Road, Colombo 03", "0771234567", 1L, 1L, date, time))
                 .isInstanceOf(DentistDoubleBookingException.class);
+        verify(patientRepository, never()).save(any(Patient.class));
         verify(appointmentRepository, never()).save(any(Appointment.class));
     }
 
     @Test
     void createAppointment_savesAndPublishesEvent_whenNoConflict() {
-        Patient patient = Patient.builder().id(1L).name("Alice Morgan").address("Cardiff").contactNumber("07700123456").build();
-        Dentist dentist = Dentist.builder().id(1L).name("Dr. Sarah Lewis").specialization("General Dentistry").build();
-        Treatment treatment = Treatment.builder().id(1L).name("Dental Cleaning").category(TreatmentCategory.STANDARD).baseCost(new BigDecimal("50.00")).build();
+        Patient patient = Patient.builder().id(1L).name("Kasun Perera").address("45 Galle Road, Colombo 03").contactNumber("0771234567").build();
+        Dentist dentist = Dentist.builder().id(1L).name("Dr. Priyantha Jayasuriya").specialization("General Dentistry").build();
+        Treatment treatment = Treatment.builder().id(1L).name("Dental Cleaning").category(TreatmentCategory.STANDARD).baseCost(new BigDecimal("4500.00")).build();
         LocalDate date = LocalDate.now().plusDays(1);
         LocalTime time = LocalTime.of(9, 30);
 
-        when(patientRepository.findById(1L)).thenReturn(Optional.of(patient));
         when(dentistRepository.findById(1L)).thenReturn(Optional.of(dentist));
         when(treatmentRepository.findById(1L)).thenReturn(Optional.of(treatment));
         when(appointmentRepository.existsByDentistAndAppointmentDateAndAppointmentTime(dentist, date, time))
                 .thenReturn(false);
+        when(patientRepository.save(any(Patient.class))).thenReturn(patient);
         when(appointmentRepository.count()).thenReturn(0L);
         when(appointmentRepository.findByAppointmentNumber("APT-000001")).thenReturn(Optional.empty());
         when(appointmentRepository.save(any(Appointment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Appointment result = appointmentService.createAppointment(1L, 1L, 1L, date, time);
+        Appointment result = appointmentService.createAppointment(
+                "Kasun Perera", "45 Galle Road, Colombo 03", "0771234567", 1L, 1L, date, time);
 
         assertThat(result.getAppointmentNumber()).isEqualTo("APT-000001");
         assertThat(result.getStatus()).isEqualTo(com.sunrisedental.entity.AppointmentStatus.SCHEDULED);

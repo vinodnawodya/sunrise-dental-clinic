@@ -15,7 +15,7 @@ BASE_URL="${3:-http://localhost:8080}"
 echo "== 1. Create a new appointment =="
 CREATE_RESPONSE=$(curl -s -u "$USERNAME:$PASSWORD" \
   -H "Content-Type: application/json" \
-  -d '{"patientId":1,"dentistId":1,"treatmentId":2,"appointmentDate":"2026-09-10","appointmentTime":"10:00:00"}' \
+  -d '{"patientName":"Kasun Perera","patientAddress":"45 Galle Road, Colombo 03","patientContactNumber":"0771234567","dentistId":1,"treatmentId":2,"appointmentDate":"2026-09-10","appointmentTime":"10:00:00"}' \
   "$BASE_URL/api/appointments")
 echo "$CREATE_RESPONSE"
 

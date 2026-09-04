@@ -24,8 +24,8 @@ Authorization: Basic <base64 admin:password>
 ```json
 {
   "appointmentNumber": "APT-000001",
-  "patientName": "Alice Morgan",
-  "dentistName": "Dr. Sarah Lewis",
+  "patientName": "Kasun Perera",
+  "dentistName": "Dr. Priyantha Jayasuriya",
   "treatmentName": "Dental Cleaning",
   "appointmentDate": "2026-09-02",
   "appointmentTime": "09:30:00",
@@ -45,7 +45,9 @@ Content-Type: application/json
 Authorization: Basic <base64 admin:password>
 
 {
-  "patientId": 1,
+  "patientName": "Kasun Perera",
+  "patientAddress": "45 Galle Road, Colombo 03",
+  "patientContactNumber": "0771234567",
   "dentistId": 1,
   "treatmentId": 2,
   "appointmentDate": "2026-09-10",
@@ -64,7 +66,7 @@ way.
   "timestamp": "2026-09-02T09:15:00Z",
   "status": 400,
   "message": "Validation failed",
-  "fieldErrors": { "patientId": "Please select a patient" }
+  "fieldErrors": { "patientName": "Patient name is required" }
 }
 ```
 
@@ -82,9 +84,9 @@ Authorization: Basic <base64 admin:password>
 ```json
 {
   "appointmentNumber": "APT-000001",
-  "patientName": "Alice Morgan",
+  "patientName": "Kasun Perera",
   "treatmentName": "Dental Cleaning",
-  "totalCost": 50.00,
+  "totalCost": 4500.00,
   "generatedDate": "2026-09-02T09:16:00"
 }
 ```

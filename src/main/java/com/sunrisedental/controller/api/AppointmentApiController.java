@@ -30,7 +30,9 @@ public class AppointmentApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public AppointmentResponseDto create(@Valid @RequestBody AppointmentFormDto request) {
         var appointment = appointmentService.createAppointment(
-                request.getPatientId(),
+                request.getPatientName(),
+                request.getPatientAddress(),
+                request.getPatientContactNumber(),
                 request.getDentistId(),
                 request.getTreatmentId(),
                 request.getAppointmentDate(),

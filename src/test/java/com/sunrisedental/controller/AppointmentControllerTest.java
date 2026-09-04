@@ -4,7 +4,6 @@ import com.sunrisedental.config.SecurityConfig;
 import com.sunrisedental.repository.DentistRepository;
 import com.sunrisedental.repository.TreatmentRepository;
 import com.sunrisedental.service.AppointmentService;
-import com.sunrisedental.service.PatientService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,8 +34,6 @@ class AppointmentControllerTest {
     @MockBean
     private AppointmentService appointmentService;
     @MockBean
-    private PatientService patientService;
-    @MockBean
     private DentistRepository dentistRepository;
     @MockBean
     private TreatmentRepository treatmentRepository;
@@ -54,7 +51,6 @@ class AppointmentControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = "STAFF")
     void newAppointmentForm_rendersForm_whenAuthenticated() throws Exception {
-        org.mockito.Mockito.when(patientService.findAll()).thenReturn(List.of());
         org.mockito.Mockito.when(dentistRepository.findAll()).thenReturn(List.of());
         org.mockito.Mockito.when(treatmentRepository.findAll()).thenReturn(List.of());
 
@@ -66,7 +62,6 @@ class AppointmentControllerTest {
     @Test
     @WithMockUser(username = "admin", roles = "STAFF")
     void createAppointment_rerendersFormWithErrors_whenInvalid() throws Exception {
-        org.mockito.Mockito.when(patientService.findAll()).thenReturn(List.of());
         org.mockito.Mockito.when(dentistRepository.findAll()).thenReturn(List.of());
         org.mockito.Mockito.when(treatmentRepository.findAll()).thenReturn(List.of());
 
@@ -75,6 +70,7 @@ class AppointmentControllerTest {
                 .andExpect(view().name("appointment-form"));
 
         verify(appointmentService, never()).createAppointment(
+                org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
                 org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
                 org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
                 org.mockito.ArgumentMatchers.any());

@@ -5,7 +5,6 @@ import com.sunrisedental.repository.DentistRepository;
 import com.sunrisedental.repository.TreatmentRepository;
 import com.sunrisedental.service.AppointmentService;
 import com.sunrisedental.service.DentistDoubleBookingException;
-import com.sunrisedental.service.PatientService;
 import com.sunrisedental.service.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
-    private final PatientService patientService;
     private final DentistRepository dentistRepository;
     private final TreatmentRepository treatmentRepository;
 
@@ -45,7 +43,9 @@ public class AppointmentController {
 
         try {
             var appointment = appointmentService.createAppointment(
-                    appointmentForm.getPatientId(),
+                    appointmentForm.getPatientName(),
+                    appointmentForm.getPatientAddress(),
+                    appointmentForm.getPatientContactNumber(),
                     appointmentForm.getDentistId(),
                     appointmentForm.getTreatmentId(),
                     appointmentForm.getAppointmentDate(),
@@ -73,7 +73,6 @@ public class AppointmentController {
     }
 
     private void addFormReferenceData(Model model) {
-        model.addAttribute("patients", patientService.findAll());
         model.addAttribute("dentists", dentistRepository.findAll());
         model.addAttribute("treatments", treatmentRepository.findAll());
     }
