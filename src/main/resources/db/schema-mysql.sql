@@ -1,43 +1,40 @@
 -- Sunrise Dental Clinic - MySQL 8 schema
 -- Canonical schema for the assignment brief. Applied when the app runs with
 -- the "mysql" Spring profile (see application-mysql.properties / README.md).
+--
+-- Tables use CREATE TABLE IF NOT EXISTS rather than DROP+CREATE, so data
+-- entered through the running app survives a restart - spring.sql.init.mode
+-- =always still runs this script on every startup as the brief requires, it
+-- just no longer wipes existing data once a table is already there.
 
-DROP TABLE IF EXISTS audit_log;
-DROP TABLE IF EXISTS bills;
-DROP TABLE IF EXISTS appointments;
-DROP TABLE IF EXISTS treatments;
-DROP TABLE IF EXISTS dentists;
-DROP TABLE IF EXISTS patients;
-DROP TABLE IF EXISTS users;
-
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id            BIGINT AUTO_INCREMENT PRIMARY KEY,
     username      VARCHAR(50)  NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     role          VARCHAR(20)  NOT NULL
 );
 
-CREATE TABLE patients (
+CREATE TABLE IF NOT EXISTS patients (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     name           VARCHAR(100) NOT NULL,
     address        VARCHAR(255),
     contact_number VARCHAR(20)  NOT NULL
 );
 
-CREATE TABLE dentists (
+CREATE TABLE IF NOT EXISTS dentists (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     name           VARCHAR(100) NOT NULL,
     specialization VARCHAR(100)
 );
 
-CREATE TABLE treatments (
+CREATE TABLE IF NOT EXISTS treatments (
     id        BIGINT AUTO_INCREMENT PRIMARY KEY,
     name      VARCHAR(100)   NOT NULL,
     category  VARCHAR(30)    NOT NULL,
     base_cost DECIMAL(10, 2) NOT NULL
 );
 
-CREATE TABLE appointments (
+CREATE TABLE IF NOT EXISTS appointments (
     id                  BIGINT AUTO_INCREMENT PRIMARY KEY,
     appointment_number  VARCHAR(20) NOT NULL UNIQUE,
     patient_id          BIGINT      NOT NULL,
@@ -52,7 +49,7 @@ CREATE TABLE appointments (
     CONSTRAINT uq_dentist_datetime UNIQUE (dentist_id, appointment_date, appointment_time)
 );
 
-CREATE TABLE bills (
+CREATE TABLE IF NOT EXISTS bills (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     appointment_id BIGINT         NOT NULL UNIQUE,
     total_cost     DECIMAL(10, 2) NOT NULL,
@@ -60,7 +57,7 @@ CREATE TABLE bills (
     CONSTRAINT fk_bill_appointment FOREIGN KEY (appointment_id) REFERENCES appointments (id)
 );
 
-CREATE TABLE audit_log (
+CREATE TABLE IF NOT EXISTS audit_log (
     id             BIGINT AUTO_INCREMENT PRIMARY KEY,
     appointment_id BIGINT,
     action         VARCHAR(50)  NOT NULL,
